@@ -4,7 +4,7 @@ import json
 
 import aiohttp
 
-from .compat import AIOHTTP2
+from .compat import AIOHTTP2, create_future
 
 if AIOHTTP2:
     from aiohttp import ClientError
@@ -174,7 +174,10 @@ class Transport:
 
         return status, data
 
-    @asyncio.coroutine
     def close(self):
         if self.session is not None:
-            yield from self.session.close()
+            return self.session.close()
+
+        future = create_future(loop=self.loop)
+        future.set_result(None)
+        return future
