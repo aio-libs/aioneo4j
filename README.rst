@@ -28,7 +28,7 @@ Usage
 
     async def go():
         url = 'http://neo4j:neo4j@127.0.0.1:7474/'
-        neo4j = Neo4j()
+        neo4j = Neo4j(url=url)
         data = await neo4j.data()
         assert bool(data)
         await neo4j.close()
