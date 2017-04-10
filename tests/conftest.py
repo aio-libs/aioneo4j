@@ -25,7 +25,8 @@ def loop(request):
 
 @pytest.fixture
 def neo4j(loop):
-    neo4j = Neo4j(url='http://neo4j:neo4jneo4j@127.0.0.1:7474/', loop=loop)
+    neo4j = Neo4j(loop=loop)
+    neo4j.auth = ('neo4j', 'neo4j')
 
     try:
         yield neo4j

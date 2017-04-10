@@ -11,7 +11,7 @@ class Client:
 
     def __init__(
         self,
-        url='http://neo4j:neo4j@127.0.0.1:7474/',
+        url='http://127.0.0.1:7474/',
         auth=None,
         transport=Transport,
         request_timeout=...,
