@@ -10,9 +10,13 @@ python:
   - "3.5"
   - "3.6"
 env:
-  - NEO4J="3.1.3"
+  - NEO4J="3.1.4"
 install:
-  - curl --fail --silent --show-error --location --remote-name http://dist.neo4j.org/neo4j-enterprise-$NEO4J-unix.tar.gz && sudo tar --extract --file neo4j-enterprise-$NEO4J-unix.tar.gz --directory /var/lib && sudo mv /var/lib/neo4j-* /var/lib/neo4j && /var/lib/neo4j/bin/neo4j start
+  - wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
+  - echo 'deb http://debian.neo4j.org/repo stable/' | sudo tee -a /etc/apt/sources.list.d/neo4j.list
+  - sudo apt-get update
+  - sudo apt-get install neo4j-enterprise=$NEO4J
+  - sudo service neo4j start
   - pip install -U setuptools
   - pip install -U pip
   - pip install -U wheel
