@@ -20,5 +20,6 @@ htmlcov
 *.out
 
 .tox/
+.cache/
 deps/
 docs/_build/
