@@ -12,7 +12,7 @@ python:
 env:
   - NEO4J="3.1.3"
 install:
-  - curl --fail --silent --show-error --location --remote-name http://dist.neo4j.org/neo4j-enterprise-$NEO4J-unix.tar.gz && sudo tar --extract --file neo4j-enterprise-$NEO4J-unix.tar.gz --directory /var/lib && mv /var/lib/neo4j-* /var/lib/neo4j && neo4j
+  - curl --fail --silent --show-error --location --remote-name http://dist.neo4j.org/neo4j-enterprise-$NEO4J-unix.tar.gz && sudo tar --extract --file neo4j-enterprise-$NEO4J-unix.tar.gz --directory /var/lib && sudo mv /var/lib/neo4j-* /var/lib/neo4j && neo4j
   - pip install -U setuptools
   - pip install -U pip
   - pip install -U wheel
