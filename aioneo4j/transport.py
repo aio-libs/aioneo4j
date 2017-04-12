@@ -4,7 +4,7 @@ import json
 
 import aiohttp
 
-from .compat import AIOHTTP2
+from .compat import AIOHTTP2, create_future
 
 if AIOHTTP2:
     from aiohttp import ClientError
@@ -175,4 +175,10 @@ class Transport:
         return status, data
 
     def close(self):
-        return self.session.close()
+        coro = self.session.close()
+        if not AIOHTTP2:
+            return coro
+
+        future = create_future(loop=self.loop)
+        future.set_result(None)
+        return future
