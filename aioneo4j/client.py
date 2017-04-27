@@ -3,7 +3,7 @@ import collections
 
 from yarl import URL
 
-from .compat import PY_350
+from .compat import PY_352
 from .transport import Transport
 
 
@@ -176,15 +176,13 @@ class Client:
 
         return data
 
-    @asyncio.coroutine
     def close(self):
-        yield from self.transport.close()
+        return self.transport.close()
 
-    if PY_350:
+    if PY_352:
         @asyncio.coroutine
         def __aenter__(self):  # noqa
             return self
 
-        @asyncio.coroutine
         def __aexit__(self, *exc_info):  # noqa
-            yield from self.close()
+            return self.close()
