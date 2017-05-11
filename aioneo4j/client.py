@@ -3,7 +3,7 @@ import collections
 
 from yarl import URL
 
-from .compat import PY_352
+from .compat import PY_350
 from .transport import Transport
 
 
@@ -33,7 +33,8 @@ class Client:
             url = url.with_password(None)
 
         self.transport = transport(
-            url=url, auth=auth,
+            url=url,
+            auth=auth,
             request_timeout=request_timeout,
             loop=self.loop,
         )
@@ -121,7 +122,7 @@ class Client:
             request_timeout=request_timeout,
         )
 
-        return data['results']
+        return data
 
     @asyncio.coroutine
     def indexes(self, path='db/data/schema/index', request_timeout=...):
@@ -179,7 +180,7 @@ class Client:
     def close(self):
         return self.transport.close()
 
-    if PY_352:
+    if PY_350:
         @asyncio.coroutine
         def __aenter__(self):  # noqa
             return self

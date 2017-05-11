@@ -11,8 +11,6 @@ if AIOHTTP2:
 else:
     from aiohttp.errors import ClientError
 
-import async_timeout  # isort:skip  # noqa
-
 from . import errors  # isort:skip  # noqa
 
 
@@ -50,7 +48,6 @@ class Transport:
         self.session = session
         if self.session is None:
             self.session = aiohttp.ClientSession(
-                loop=self.loop,
                 connector=aiohttp.TCPConnector(
                     limit=maxsize,
                     use_dns_cache=use_dns_cache,
@@ -145,22 +142,21 @@ class Transport:
             if not isinstance(data, bytes):
                 data = data.encode('utf-8')
 
-        _request_timeout = request_timeout
-        if request_timeout is ...:
-            _request_timeout = self.request_timeout
-
         _url = self.url / path
 
         _coro = self._perform_request(method, _url, params=params, data=data)
 
-        if _request_timeout is not ...:
-            try:
-                with async_timeout.timeout(_request_timeout, loop=self.loop):
-                    status, headers, data = yield from _coro
-            except asyncio.TimeoutError as exc:
-                raise errors.TransportError from exc
-        else:
-            status, headers, data = yield from _coro
+        _request_timeout = request_timeout
+        if request_timeout is ...:
+            _request_timeout = self.request_timeout
+        if _request_timeout is ...:
+            _request_timeout = None
+
+        try:
+            with aiohttp.Timeout(_request_timeout, loop=self.loop):
+                status, headers, data = yield from _coro
+        except asyncio.TimeoutError:
+            raise errors.TimeoutError
 
         if data:
             try:
@@ -179,6 +175,6 @@ class Transport:
         if not AIOHTTP2:
             return coro
 
-        future = create_future(loop=self.loop)
-        future.set_result(None)
-        return future
+        fut = create_future(loop=self.loop)
+        fut.set_result(None)
+        return fut
