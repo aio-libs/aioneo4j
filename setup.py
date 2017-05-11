@@ -47,5 +47,5 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-    keywords=['neo4j', 'aioneo4j', 'asyncio', 'aiohttp'],
+    keywords=['neo4j', 'asyncio', 'aiohttp'],
 )
