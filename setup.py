@@ -30,7 +30,6 @@ setup(
     long_description=read('README.rst'),
     install_requires=[
         'aiohttp>=1.3.0',
-        'slacker',
     ],
     packages=['aioneo4j'],
     include_package_data=True,
