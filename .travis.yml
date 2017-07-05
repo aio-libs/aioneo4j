@@ -1,6 +1,7 @@
 dist: trusty
 language: python
 sudo: required
+group: deprecated-2017Q2
 addons:
   apt:
     packages:
@@ -16,7 +17,7 @@ env:
 install:
   - wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
   - echo 'deb http://debian.neo4j.org/repo stable/' | sudo tee -a /etc/apt/sources.list.d/neo4j.list
-  - sudo apt-get update --allow-unauthenticated
+  - sudo apt-get update
   - sudo apt-get install neo4j-enterprise=$NEO4J
   - sudo service neo4j start
   - pip install -U setuptools
