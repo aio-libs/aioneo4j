@@ -2,7 +2,7 @@ aiohttp==2.2.3
 appdirs==1.4.3
 appnope==0.1.0
 async-timeout==1.2.1
-chardet==3.0.2
+chardet==3.0.4
 coverage==4.4
 decorator==4.0.11
 flake8==3.3.0
@@ -12,7 +12,7 @@ ipython-genutils==0.2.0
 isort==4.2.5
 jedi==0.10.2
 mccabe==0.6.1
-multidict==2.1.4
+multidict==3.1.0
 packaging==16.8
 pexpect==4.2.1
 pickleshare==0.7.4
@@ -32,4 +32,4 @@ tox==2.7.0
 traitlets==4.3.2
 virtualenv==15.1.0
 wcwidth==0.1.7
-yarl==0.10.2
+yarl==0.11.0
