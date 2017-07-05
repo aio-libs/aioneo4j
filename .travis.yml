@@ -1,6 +1,7 @@
 dist: trusty
 language: python
-sudo: true
+sudo: required
+group: deprecated-2017Q2
 addons:
   apt:
     packages:
