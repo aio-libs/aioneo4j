@@ -15,12 +15,11 @@ def loop(request):
 
     request.addfinalizer(lambda: asyncio.set_event_loop(None))
 
-    try:
-        yield loop
-    finally:
-        loop.call_soon(loop.stop)
-        loop.run_forever()
-        loop.close()
+    yield loop
+
+    loop.call_soon(loop.stop)
+    loop.run_forever()
+    loop.close()
 
 
 @pytest.fixture
@@ -28,10 +27,9 @@ def neo4j(loop):
     neo4j = Neo4j(loop=loop)
     neo4j.auth = ('neo4j', 'neo4jneo4j')
 
-    try:
-        yield neo4j
-    finally:
-        loop.run_until_complete(neo4j.close())
+    yield neo4j
+
+    loop.run_until_complete(neo4j.close())
 
 
 @pytest.mark.tryfirst
