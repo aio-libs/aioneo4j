@@ -4,12 +4,7 @@ import json
 
 import aiohttp
 
-from .compat import AIOHTTP2
-
-if AIOHTTP2:
-    from aiohttp import ClientError
-else:
-    from aiohttp.errors import ClientError
+from aiohttp import ClientError
 
 from . import errors  # isort:skip  # noqa
 
@@ -83,8 +78,7 @@ class Transport:
             'Accept': 'application/json; charset=UTF-8',
         }
 
-    @asyncio.coroutine
-    def _perform_request(
+    async def _perform_request(
         self,
         method,
         url,
@@ -94,7 +88,7 @@ class Transport:
         response = None
 
         try:
-            response = yield from self.session.request(
+            response = await self.session.request(
                 method,
                 url,
                 params=params,
@@ -104,7 +98,7 @@ class Transport:
                 timeout=None,
             )
 
-            text = yield from response.text()
+            text = await response.text()
 
             if not (200 <= response.status <= 300):
                 extra = None
@@ -121,10 +115,9 @@ class Transport:
             raise errors.TransportError from exc
         finally:
             if response is not None:
-                yield from response.release()
+                await response.release()
 
-    @asyncio.coroutine
-    def perform_request(
+    async def perform_request(
         self,
         method,
         path,
@@ -154,7 +147,7 @@ class Transport:
 
         try:
             with aiohttp.Timeout(_request_timeout, loop=self.loop):
-                status, headers, data = yield from _coro
+                status, headers, data = await _coro
         except asyncio.TimeoutError:
             raise errors.TimeoutError
 
@@ -170,5 +163,5 @@ class Transport:
 
         return status, data
 
-    def close(self):
-        return self.session.close()
+    async def close(self):
+        await self.session.close()
