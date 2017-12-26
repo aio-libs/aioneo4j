@@ -1,10 +1,8 @@
-import asyncio
 import socket
 import time
 import uuid
 
 import pytest
-from aiohttp.test_utils import unused_port
 from docker import from_env as docker_from_env
 
 from aioneo4j import Neo4j
