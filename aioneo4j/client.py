@@ -3,7 +3,6 @@ import collections
 
 from yarl import URL
 
-from .compat import PY_350
 from .transport import Transport
 
 
@@ -49,13 +48,12 @@ class Client:
 
     del get_auth, set_auth
 
-    @asyncio.coroutine
-    def data(
+    async def data(
         self,
         path='db/data',
         request_timeout=...,
     ):
-        _, data = yield from self.transport.perform_request(
+        _, data = await self.transport.perform_request(
             'GET',
             path,
             request_timeout=request_timeout,
@@ -63,8 +61,7 @@ class Client:
 
         return data
 
-    @asyncio.coroutine
-    def cypher(
+    async def cypher(
         self,
         query,
         path='db/data/cypher',
@@ -81,7 +78,7 @@ class Client:
 
             request = query
 
-        _, data = yield from self.transport.perform_request(
+        _, data = await self.transport.perform_request(
             'POST',
             path,
             data=request,
@@ -90,8 +87,7 @@ class Client:
 
         return data
 
-    @asyncio.coroutine
-    def transaction_commit(
+    async def transaction_commit(
         self,
         *statements,
         path='db/data/transaction/commit',
@@ -115,7 +111,7 @@ class Client:
 
                 request['statements'].append(statement)
 
-        _, data = yield from self.transport.perform_request(
+        _, data = await self.transport.perform_request(
             'POST',
             path,
             data=request,
@@ -124,9 +120,8 @@ class Client:
 
         return data
 
-    @asyncio.coroutine
-    def indexes(self, path='db/data/schema/index', request_timeout=...):
-        _, data = yield from self.transport.perform_request(
+    async def indexes(self, path='db/data/schema/index', request_timeout=...):
+        _, data = await self.transport.perform_request(
             'GET',
             path,
             request_timeout=request_timeout,
@@ -134,13 +129,12 @@ class Client:
 
         return data
 
-    @asyncio.coroutine
-    def constraints(
+    async def constraints(
         self,
         path='db/data/schema/constraint',
         request_timeout=...,
     ):
-        _, data = yield from self.transport.perform_request(
+        _, data = await self.transport.perform_request(
             'GET',
             path,
             request_timeout=request_timeout,
@@ -148,8 +142,7 @@ class Client:
 
         return data
 
-    @asyncio.coroutine
-    def user_password(
+    async def user_password(
         self,
         password,
         username='neo4j',
@@ -163,7 +156,7 @@ class Client:
 
         request = {'password': password}
 
-        _, data = yield from self.transport.perform_request(
+        _, data = await self.transport.perform_request(
             'POST',
             path,
             data=request,
@@ -177,14 +170,11 @@ class Client:
 
         return data
 
-    def close(self):
-        return self.transport.close()
+    async def close(self):
+        await self.transport.close()
 
-    if PY_350:
-        @asyncio.coroutine
-        def __aenter__(self):  # noqa
-            return self
+    async def __aenter__(self):  # noqa
+        return self
 
-        @asyncio.coroutine
-        def __aexit__(self, *exc_info):  # noqa
-            yield from self.close()
+    async def __aexit__(self, *exc_info):  # noqa
+        await self.close()
