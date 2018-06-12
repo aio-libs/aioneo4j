@@ -3,7 +3,7 @@ import collections
 import json
 
 import aiohttp
-
+import async_timeout
 from aiohttp import ClientError
 
 from . import errors  # isort:skip  # noqa
@@ -146,7 +146,7 @@ class Transport:
             _request_timeout = None
 
         try:
-            with aiohttp.Timeout(_request_timeout, loop=self.loop):
+            with async_timeout.timeout(_request_timeout, loop=self.loop):
                 status, headers, data = await _coro
         except asyncio.TimeoutError:
             raise errors.TimeoutError

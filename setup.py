@@ -29,7 +29,8 @@ setup(
     description='asyncio client for neo4j',
     long_description=read('README.rst'),
     install_requires=[
-        'aiohttp>=1.3.0',
+        'aiohttp>=2.3.6',
+        'async_timeout',
     ],
     packages=['aioneo4j'],
     include_package_data=True,
