@@ -1,4 +1,4 @@
-aiohttp==2.3.6
+aiohttp==3.3.2
 async-timeout==1.2.1
 docker==2.7.0
 flake8==3.5.0
