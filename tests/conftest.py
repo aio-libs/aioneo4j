@@ -10,14 +10,13 @@ from aioneo4j import Neo4j
 
 @pytest.fixture(scope='session')
 def session_id():
-    '''Unique session identifier, random string.'''
+    """Unique session identifier, random string."""
     return str(uuid.uuid4())
 
 
 @pytest.fixture(scope='session')
 def docker():
-    client = docker_from_env(version='auto')
-    return client
+    return docker_from_env(version='auto')
 
 
 def pytest_addoption(parser):
@@ -44,9 +43,9 @@ def neo4j_server(docker, session_id, neo4j_tag, tmpdir_factory, request):
     container = docker.containers.run(
         image='neo4j:{}'.format(neo4j_tag),
         name='aioneo4j-test-server-{}-{}'.format(neo4j_tag, session_id),
-        ports={'7474/tcp': None,
-               '7473/tcp': None,
-               '7687/tcp': None},
+        ports={'7474/tcp': 7474,
+               '7473/tcp': 7473,
+               '7687/tcp': 7687},
         volumes={data_dir: {'bind': '/data', 'mode': 'rw'},
                  logs_dir: {'bind': '/logs', 'mode': 'rw'}},
         environment={'NEO4J_AUTH': 'neo4j/pass'},
